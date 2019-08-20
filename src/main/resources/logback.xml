@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    For more information about Logback:
+    https://logback.qos.ch/manual/layouts.html
+-->
+
 <configuration>
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Log messages format -->
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            <pattern>
+                <!-- %d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg %n -->
+                %d{HH:mm:ss.SSS} [%thread] %highlight(%-5level %logger{36}) - %msg %n
             </pattern>
         </encoder>
 
@@ -16,7 +25,19 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
     </appender>
+
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <!-- Log messages format -->
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} [%thread] %highlight(%-5level %logger{36}) - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
     <root level="DEBUG">
         <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </root>
 </configuration>

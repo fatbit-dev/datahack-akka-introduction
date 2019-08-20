@@ -15,6 +15,7 @@ object Boot extends App {
 
     // path: /user/teacher
     val teacherActorRef: ActorRef = actorSystem.actorOf(Props[Teacher], "teacher")
+
     // path: /user/student
     val studentActorRef: ActorRef =
         actorSystem.actorOf(Props(classOf[Student], teacherActorRef), "student")
