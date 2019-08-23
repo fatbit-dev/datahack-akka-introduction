@@ -14,6 +14,8 @@ class Teacher extends Actor with ActorLogging {
     // self is an ActorRef (is a reference to itself). It's an Akka thing, not the same as "this" object.
     log.debug(s"${self.path} actor created")
 
+    // Al hacer los tests del Student, necesitábamos añadir el topic de "Biology" a este mapa de advices, por eso
+    // lo hemos cambiado por un var.
     var advices: Map[String, String] = Map[String, String] (
         "History" -> "Moderation is for cowards",
         "Maths" -> "Anything worth doing is worth overdoing",
