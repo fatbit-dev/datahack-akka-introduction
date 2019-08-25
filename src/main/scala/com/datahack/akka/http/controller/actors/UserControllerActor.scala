@@ -8,7 +8,7 @@ import com.datahack.akka.http.service.UserService
 
 import scala.concurrent.ExecutionContextExecutor
 
-object UserControllerActor {
+object UserControllerActor {  // En terminología Java, esto sería una fachada (Facade).
   case object GetAllUsers
   case class SearchUser(id: Long)
   case class CreateUser(user: User)
@@ -22,10 +22,12 @@ class UserControllerActor(userService: UserService) extends Actor {
 
   override def receive: Receive = {
 
+    // Cuando se resuelva el Futuro de userService.users(), devolvemos el resultado al sender (le enviamos un mensaje
+    // con el SUCCESS o con el FAILURE).
     case GetAllUsers => userService.users() pipeTo sender
     case SearchUser(id) => userService.searchUser(id) pipeTo sender
     case CreateUser(user) => userService.insertUser(user) pipeTo sender
-    case UpdateUser(user) => use rService.updateUser(user) pipeTo sender
+    case UpdateUser(user) => userService.updateUser(user) pipeTo sender
     case DeleteUser(id) => userService.deleteUser(id) pipeTo sender
   }
 }

@@ -8,12 +8,12 @@ import spray.json.{DefaultJsonProtocol, PrettyPrinter, RootJsonFormat}
  */
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 
-  implicit val printer = PrettyPrinter
+  implicit val printer: PrettyPrinter.type = PrettyPrinter
 
   implicit val userFormat: RootJsonFormat[User] = jsonFormat4(User)
 
-  implicit val productFormat = jsonFormat6(Product)
+  implicit val productFormat: RootJsonFormat[Product] = jsonFormat6(Product)
 
-  implicit val orderFormat = jsonFormat3(Order)
+  implicit val orderFormat: RootJsonFormat[Order] = jsonFormat3(Order)
 
 }

@@ -18,7 +18,7 @@ import scala.util.{Success, Try}
 object Boot extends App with Directives {
 
   // This configs are in the application.conf file
-  val config = ConfigFactory.load()
+  val config = ConfigFactory.load() // Busca dentro del contexto (classpath) un application.conf, y lo parsea.
   val host = Try(config.getString("http.host")).getOrElse("0.0.0.0")
   val port = Try(config.getInt("http.port")).getOrElse(9090)
 
@@ -31,7 +31,7 @@ object Boot extends App with Directives {
   lazy val userDao = new UserDao
   lazy val userService = new UserService(userDao)
   lazy val userActor = system.actorOf(Props(classOf[UserControllerActor], userService), "UserController")
-  lazy val userController = new UserController(userActor)
+  lazy val userController = new UserController(userActor) // También necesita un ExceutionContext, pero coge el implícito de arriba.
 
   // Product controller
   lazy val productDao = new ProductDao
@@ -47,14 +47,18 @@ object Boot extends App with Directives {
   // TODO: Initialize inventory
   //inventoryActor ! InitInventory
 
-  // Start HTTP server
-  // TODO: Add users controller routes
+  // Define HTTP server routes.
+  // DONE: Add users controller routes
   // TODO: Add products controller routes
   // TODO: Add session controller routes
   val routes = userController.routes
-  // TODO: bind Http actor to host an port with controller routes
+
+  // Start HTTP server.
+  // DONE: bind Http actor to host an port with controller routes
   val httpServer: Future[Http.ServerBinding] = Http().bindAndHandle(routes, host, port)
   httpServer.map(server => println(s"Http service listening at ${server.localAddress.getHostName}:${server.localAddress.getPort}"))
+
+
   // Ensure that the constructed ActorSystem is shut down when the JVM shuts down
   sys.addShutdownHook(system.terminate())
 }

@@ -78,7 +78,7 @@ class UserService(userDao: UserDao) {
       userFound <- userDao.getById(id)
       if userFound.isDefined
       _ <- userDao.delete(id)
-    } yield UserDeleted ) recover {
+    } yield UserDeleted) recover {
       case _: NoSuchElementException => UserNotFound
     }
   }
