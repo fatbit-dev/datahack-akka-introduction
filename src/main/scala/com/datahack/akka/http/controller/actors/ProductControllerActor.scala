@@ -16,14 +16,17 @@ object ProductControllerActor {
   case class DeleteProduct(id: Long)
 }
 
-// TODO: El actor recive por parámetro el servicio que gestiona los procutos
-class ProductControllerActor extends Actor {
+// El actor recibe por parámetro el servicio que gestiona los procutos.
+class ProductControllerActor(productService: ProductService) extends Actor {
 
   implicit val executionContext: ExecutionContextExecutor = context.dispatcher
 
   override def receive: Receive = {
-
-    //TODO: utilizar los métodos del servicio para getionar los mensajes y devolver los datos al controlador
-
+    // Utiliza los métodos del servicio para getionar los mensajes y devolver los datos al controlador.
+    case GetAllProducts => productService.products() pipeTo sender
+    case SearchProduct(productId) => productService.searchProduct(productId) pipeTo sender
+    case CreateProduct(product) => productService.insertProduct(product) pipeTo sender
+    case UpdateProduct(product) => productService.updateProduct(product) pipeTo sender
+    case DeleteProduct(productId) => productService.deleteProduct(productId) pipeTo sender
   }
 }

@@ -18,11 +18,11 @@ import scala.concurrent.duration._
 class UserControllerSpec
   extends WordSpec
     with Matchers
-    with Directives
-    with ScalatestRouteTest
-    with BeforeAndAfterAll
-    with Generators
-    with JsonSupport {
+    with Directives         // De Akka-HTTP Test kit, nos permite probar las directivas
+    with ScalatestRouteTest // Para probar las rutas
+    with BeforeAndAfterAll  // Para poder generar/destruir la DB en beforeAll()/afterAll()
+    with Generators         // Los generadores que hemos creado antes
+    with JsonSupport {      // Los conversores que hemos configurado antes (para un/marshalling)
 
   var schemaName: String = ""
 
@@ -36,7 +36,9 @@ class UserControllerSpec
   val userController = new UserController(userControllerActor)
 
   override protected def beforeAll(): Unit = {
+    // Recogemos el Futuro de initDatabase() con un Await
     schemaName = Await.result(SqlTestUtils.initDatabase(), 5 seconds)
+    // Future.sequence() transforma una Lista de Futuros en un Futuro de Listas
     Await.result(Future.sequence(SqlTestUtils.insertList(users.toList, schemaName)), 5 seconds)
   }
 

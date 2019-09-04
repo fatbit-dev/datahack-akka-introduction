@@ -45,7 +45,7 @@ class SessionControllerSpec
   "Session Controller" should {
 
     "create a session and add order to it" in {
-      val inventoryRef: TestActorRef[Inventory] = ???
+      val inventoryRef: TestActorRef[Inventory] = TestActorRef[UserControllerActor](new UserControllerActor(userService))
       val sessionControllerActorRef: TestActorRef[SessionControllerActor] =
         TestActorRef[SessionControllerActor](new SessionControllerActor(inventoryRef))
       val sessionController = new SessionController()
